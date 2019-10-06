@@ -13,7 +13,18 @@ passport.use(
             callbackURL: '/auth/google/callback'
         },
         (accessToken, refreshToken, profile, done)=> {
-            new User({googleId: profile.id}).save();
+            //below are one of example of async process
+            User.findOne({googleId: profile.id}).then((existingUser)=>{ //this is a smooth promise ES2017
+                if (existingUser){
+                    done(null,existingUser);
+                } else {
+                    new User({googleId: profile.id})
+                    .save() //this is also async, we use promise to handle (.then())
+                    .then(user => done(null, user));
+
+                }
+            });
+            
         }
     )
 );
