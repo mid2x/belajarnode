@@ -19,6 +19,8 @@ app.use(
         keys: [keys.cookieKey]
     })
 );
+app.use(pasport.initialize());
+app.use(pasport.session());
 
 //output from modules (in file authRoutes) exported as a function
 require('./routes/authRoutes')(app);
